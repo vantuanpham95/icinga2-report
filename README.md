@@ -7,37 +7,41 @@ Icinga là một hệ thống ứng dụng mã nguồn mở có chức năng gi�
 Icinga2 cũng tương thích ngược với Nagios, tạo điều kiện thuận lợi cho việc chuyển đổi giữa hai nền tảng giám sát . 
  
 Các chức năng 
- * Monitor 
-  * Giám sát các dịch vụ mạng (SMTP, POP3, HTTP, NNTP, ping, ...) 
-  * Giám sát các tài nguyên máy chủ lưu trữ (tải CPU, sử dụng disk, v.v.) 
-  * Giám sát các thành phần máy chủ (thiết bị chuyển mạch, bộ định tuyến, cảm biến nhiệt độ và độ ẩm ...) 
-  * Plugin đơn giản cho phép người dùng dễ dàng phát triển kiểm tra dịch vụ của mình 
-  * Kiểm tra dịch vụ song song 
-  * Khả năng xác định phân cấp máy chủ lưu trữ cho phép phát hiện và phân biệt giữa các máy chủ bị hỏng và những máy không thể truy cập được 
-  * Khả năng xác định trình xử lý sự kiện sẽ được chạy trong các sự kiện dịch vụ hoặc máy chủ để giải quyết vấn đề chủ động 
- * Notification 
-  * Thông báo người liên lạc khi các sự cố dịch vụ hoặc máy chủ xảy ra và được giải quyết (thông qua email, SMS hoặc phương pháp do người dùng xác định) 
-  * Tăng cường cảnh báo cho người dùng khác hoặc kênh truyền thông 
- * Visualisation & Reporting 
-  * Hai giao diện người dùng tùy chọn (Icinga Classic UI và Icinga Web) để hiển thị trạng thái máy chủ và dịch vụ, bản đồ mạng, báo cáo, nhật ký ... 
-  * Report Icinga dựa trên Báo cáo Jasper nguồn mở cho cả giao diện người dùng Icinga Classic và Icinga Web 
-  * Report dựa trên mẫu 
-  * Báo cáo kho với mức độ truy cập khác nhau và tạo báo cáo tự động và phân phối 
-  * Báo cáo sử dụng năng suất 
-  * Hiệu suất đồ thị thông qua tiện ích như PNP4Nagios, NagiosGrapher và InGraph 
+ **Monitor**
+  * Giám sát các dịch vụ mạng (SMTP, POP3, HTTP, NNTP, ping, ...) 
+  * Giám sát các tài nguyên máy chủ lưu trữ (tải CPU, sử dụng disk, v.v.) 
+  * Giám sát các thành phần máy chủ (thiết bị chuyển mạch, bộ định tuyến, cảm biến nhiệt độ và độ ẩm ...) 
+  * Plugin đơn giản cho phép người dùng dễ dàng phát triển kiểm tra dịch vụ của mình 
+  * Kiểm tra dịch vụ song song 
+  * Khả năng xác định phân cấp máy chủ lưu trữ cho phép phát hiện và phân biệt giữa các máy chủ bị hỏng và những máy không thể truy cập được 
+  * Khả năng xác định trình xử lý sự kiện sẽ được chạy trong các sự kiện dịch vụ hoặc máy chủ để giải quyết vấn đề chủ động 
+ 
+ **Notification**
+ * Thông báo người liên lạc khi các sự cố dịch vụ hoặc máy chủ xảy ra và được giải quyết (thông qua email, SMS hoặc phương pháp do người dùng xác định) 
+ * Tăng cường cảnh báo cho người dùng khác hoặc kênh truyền thông 
+ 
+ **Visualisation & Reporting**
+ * Hai giao diện người dùng tùy chọn (Icinga Classic UI và Icinga Web) để hiển thị trạng thái máy chủ và dịch vụ, bản đồ mạng, báo cáo, nhật ký ... 
+ * Report Icinga dựa trên Báo cáo Jasper nguồn mở cho cả giao diện người dùng Icinga Classic và Icinga Web 
+ * Report dựa trên mẫu 
+ * Báo cáo kho với mức độ truy cập khác nhau và tạo báo cáo tự động và phân phối 
+ * Báo cáo sử dụng năng suất 
+ * Hiệu suất đồ thị thông qua tiện ích như PNP4Nagios, NagiosGrapher và InGraph 
  
 Cấu trúc 
  
-https://www.icinga.com/wp-content/uploads/2011/08/Architecture_1.5_800px.png 
+![1](https://www.icinga.com/wp-content/uploads/2011/08/Architecture_1.5_800px.png )
  
-Icinga Core: quản lý các nhiệm vụ giám sát, nhận được kết quả kiểm tra từ các plug-in khác nhau. Sau đó, kết nối các kết quả này với IDODB. 
-Icinga 2: quản lý các nhiệm vụ theo dõi, chạy kiểm tra, gửi thông báo. Các tính năng của Icinga 2 có thể được kích hoạt theo yêu cầu, có thể là các tính năng mặc định như thành phần "checker" hoặc "notification" hoặc các giao diện bên ngoài tương thích với Icinga 1.x và các giao diện người dùng 
-Icinga's User Interfaces: 
-Icinga Classic UI (còn được gọi là Classic Web) dựa trên các mô hình CGI của Nagios và giữ lại định dạng của nó. Dự án Icinga tiếp tục bổ sung các tính năng mới cho giao diện này như pagination, đầu ra JSON, và CSV export 
-Icinga Web 2 hiện đang được phát triển song song với Giao diện người dùng Cổ điển và Web và đã được công bố trong Hội nghị Giám sát Mã nguồn Mở vào tháng 11 năm 2013 
-Icinga Data Out Database: (IDODB) là điểm lưu trữ dữ liệu giám sát lịch sử cho các tiện ích bổ sung hoặc giao diện Web Icinga để truy cập 
-Icinga Reporting: Dự án Icinga cung cấp mô-đun Icinga Reporting tùy chọn dựa trên Báo cáo Jasper nguồn mở. Nó có thể được tích hợp vào cả giao diện người dùng Icinga Classic và Icinga Web. 
-Icinga Mobile: là một giao diện người dùng cho điện thoại thông minh và trình duyệt máy tính bảng chạy trên WebKit 
+ * Icinga Core: quản lý các nhiệm vụ giám sát, nhận được kết quả kiểm tra từ các plug-in khác nhau. Sau đó, kết nối các kết quả này với IDODB.
+ * Icinga 2: quản lý các nhiệm vụ theo dõi, chạy kiểm tra, gửi thông báo. Các tính năng của Icinga 2 có thể được kích hoạt theo yêu cầu, có thể là các tính năng mặc định như thành phần "checker" hoặc "notification" hoặc các giao diện bên ngoài tương thích với Icinga 1.x và các giao diện người dùng 
+ * Icinga's User Interfaces:
+   * Icinga Classic UI (còn được gọi là Classic Web) dựa trên các mô hình CGI của Nagios và giữ lại định dạng của nó. Dự án Icinga tiếp tục bổ sung các tính năng mới cho giao diện này như pagination, đầu ra JSON, và CSV export 
+
+   * Icinga Web 2 hiện đang được phát triển song song với Giao diện người dùng Cổ điển và Web và đã được công bố trong Hội nghị Giám sát Mã nguồn Mở vào tháng 11 năm 2013 
+
+ * Icinga Data Out Database: (IDODB) là điểm lưu trữ dữ liệu giám sát lịch sử cho các tiện ích bổ sung hoặc giao diện Web Icinga để truy cập 
+ * Icinga Reporting: Dự án Icinga cung cấp mô-đun Icinga Reporting tùy chọn dựa trên Báo cáo Jasper nguồn mở. Nó có thể được tích hợp vào cả giao diện người dùng Icinga Classic và Icinga Web. 
+ * Icinga Mobile: là một giao diện người dùng cho điện thoại thông minh và trình duyệt máy tính bảng chạy trên WebKit 
  
 Ưu điểm 
 Thiết kế mô đun cho phép bạn chọn plugin để cài đặt. 
