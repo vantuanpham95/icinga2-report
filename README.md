@@ -56,6 +56,7 @@ Các chức năng
 ## II. Thực hiện LAB 
 ### 1. Chuẩn bị 
  ![topo](https://github.com/vantuanpham95/icinga2-report/blob/master/images/icinga2labtopo.png)
+ 
 **icinga2-master:** 
  * OS: ubuntu server 16.04 
  * IP: 10.0.0.1 (internal) 
@@ -84,11 +85,13 @@ Cài đặt icingaweb2
     apt-get install -y mysql-server php7.0 libapache2-mod-php7.0 
  
  ![1](https://github.com/vantuanpham95/icinga2-report/blob/master/images/1)
+ 
 Thêm mật khẩu cho mysql 
  
     apt-get install -y icingaweb2 
 
 ![2](https://github.com/vantuanpham95/icinga2-report/blob/master/images/2.png)
+
 Thiết lập mySQL là backend cho icinga nếu lỡ ấn No trong khi cài đặt mysql 
 
     icinga2 feature enable ido-mysql command 
@@ -101,6 +104,7 @@ thêm dòng
 
     date.timezone = Asia/Ho_Chi_Minh 
  ![3](https://github.com/vantuanpham95/icinga2-report/blob/master/images/3.png)
+ 
 Restart apache 
 
     /etc/init.d/apache2 restart 
@@ -168,18 +172,18 @@ Sơ lược về một số file config trong icinga: /etc/icinga2
  * constants.conf: file cấu hình có thể được sử dụng để xác định tham số global, xác định thư mục nguồn của các plugins có sẵn và mở rộng. 
  * zones.conf: Tệp này có thể được sử dụng để xác định đối tượng cấu hình Zone và Endpoint yêu cầu cho giám sát phân tán.
  * Thư mục conf.d: Thư mục này chứa cấu hình ví dụ sẽ giúp bắt đầu theo dõi máy chủ lưu trữ cục bộ và các dịch vụ của nó. Ví dụ: 
-  * hosts.conf 
-  * services.conf 
-  * users.conf 
-  * notifications.conf 
-  * commands.conf 
-  * groups.conf 
-  * templates.conf 
-  * downtimes.conf 
-  * timeperiods.conf 
-  * satellite.conf 
-  * api-users.conf 
-  * app.conf 
+   * hosts.conf 
+   * services.conf 
+   * users.conf 
+   * notifications.conf 
+   * commands.conf 
+   * groups.conf 
+   * templates.conf 
+   * downtimes.conf 
+   * timeperiods.conf 
+   * satellite.conf 
+   * api-users.conf 
+   * app.conf 
 
 icinga2 cung cấp một số service check sẵn, như load, procs, swap, users, icinga, ping4, ping6, ssh, http, optional: Icinga Web 2, disk, disk / 
 
