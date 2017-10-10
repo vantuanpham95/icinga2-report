@@ -6,7 +6,8 @@ Icinga là một hệ thống ứng dụng mã nguồn mở có chức năng gi�
  
 Icinga2 cũng tương thích ngược với Nagios, tạo điều kiện thuận lợi cho việc chuyển đổi giữa hai nền tảng giám sát . 
  
-Các chức năng 
+Các chức năng
+
  **Monitor**
   * Giám sát các dịch vụ mạng (SMTP, POP3, HTTP, NNTP, ping, ...) 
   * Giám sát các tài nguyên máy chủ lưu trữ (tải CPU, sử dụng disk, v.v.) 
@@ -28,7 +29,7 @@ Các chức năng
  * Báo cáo sử dụng năng suất 
  * Hiệu suất đồ thị thông qua tiện ích như PNP4Nagios, NagiosGrapher và InGraph 
  
-Cấu trúc 
+**Cấu trúc**
  
 ![1](https://www.icinga.com/wp-content/uploads/2011/08/Architecture_1.5_800px.png )
  
@@ -43,109 +44,159 @@ Cấu trúc
  * Icinga Reporting: Dự án Icinga cung cấp mô-đun Icinga Reporting tùy chọn dựa trên Báo cáo Jasper nguồn mở. Nó có thể được tích hợp vào cả giao diện người dùng Icinga Classic và Icinga Web. 
  * Icinga Mobile: là một giao diện người dùng cho điện thoại thông minh và trình duyệt máy tính bảng chạy trên WebKit 
  
-Ưu điểm 
-Thiết kế mô đun cho phép bạn chọn plugin để cài đặt. 
-Dễ dàng di chuyển từ Nagios 
-Một trong những giải pháp báo cáo và giám sát kỹ lưỡng nhất 
-Nhược điểm: 
-Cấu hình có thể là khó khăn. 
-Tài liệu, mặc dù rộng rãi, nhưng không bao gồm một hướng dẫn cụ thể nào 
+**Ưu điểm:**
+ * Thiết kế mô đun cho phép bạn chọn plugin để cài đặt. 
+ * Dễ dàng di chuyển từ Nagios 
+ * Một trong những giải pháp báo cáo và giám sát kỹ lưỡng nhất 
  
-Thực hiện LAB 
-Chuẩn bị 
+**Nhược điểm:** 
+ * Cấu hình có thể là khó khăn. 
+ * Tài liệu, mặc dù rộng rãi, nhưng không bao gồm một hướng dẫn cụ thể nào 
  
-icinga2-master: 
-OS: ubuntu server 16.04 
-IP: 10.0.0.1 (internal) 
-CPU: 1 core, Disk: 8GB, RAM: 256MB 
-node1: 
-OS: ubuntu server 16.04 
-IP: 10.0.0.2 (internal) 
-CPU: 1 core, Disk: 8GB, RAM: 256MB 
-node2: 
-OS: ubuntu server 16.04 
-IP: 10.0.0.3 (internal) 
-CPU: 1 core, Disk: 8GB, RAM: 256MB 
-Cài đặt và cấu hình 
-Cài đặt icinga2 và icingaweb2 trên icinga2-master 
-Trên icinga2-master 
+## II. Thực hiện LAB 
+### 1. Chuẩn bị 
+ ![2]()
+**icinga2-master:** 
+ * OS: ubuntu server 16.04 
+ * IP: 10.0.0.1 (internal) 
+ * CPU: 1 core, Disk: 8GB, RAM: 256MB 
+**node1:**
+ * OS: ubuntu server 16.04 
+ * IP: 10.0.0.2 (internal) 
+ * CPU: 1 core, Disk: 8GB, RAM: 256MB 
+**node2:**
+ * OS: ubuntu server 16.04 
+ * IP: 10.0.0.3 (internal) 
+ * CPU: 1 core, Disk: 8GB, RAM: 256MB 
+### 2. Cài đặt và cấu hình 
+#### a. Cài đặt icinga2 và icingaweb2 trên icinga2-master 
+**Trên icinga2-master**
  
-apt-get update && apt-get upgrade –y 
+    apt-get update && apt-get upgrade –y 
  
 Thêm repo & cài đặt icinga2 
+```
 add-apt-repository ppa:formorer/icinga && apt-get update 
 apt-get install -y icinga2 icinga2-ido-mysql 
+```
 Cài đặt icingaweb2 
-apt-get install -y mysql-server php7.0 libapache2-mod-php7.0 
+
+    apt-get install -y mysql-server php7.0 libapache2-mod-php7.0 
  
+ ![1]()
 Thêm mật khẩu cho mysql 
  
-apt-get install -y icingaweb2 
+    apt-get install -y icingaweb2 
+
+![2]()
 Thiết lập mySQL là backend cho icinga nếu lỡ ấn No trong khi cài đặt mysql 
-icinga2 feature enable ido-mysql command 
+
+    icinga2 feature enable ido-mysql command 
+
 Set timezone cho php 
-vim /etc/php/7.0/cli/php.ini 
-thêm dòng date.timezone = Asia/Ho_Chi_Minh 
- 
+    
+    vim /etc/php/7.0/cli/php.ini 
+
+thêm dòng 
+
+    date.timezone = Asia/Ho_Chi_Minh 
+ ![3]()
 Restart apache 
-/etc/init.d/apache2 restart 
+
+    /etc/init.d/apache2 restart 
+
 Như vậy đã cài đặt xong, giờ chúng ta tiếp tục trên nền web để thiết lập 
+
 Vào trình duyệt: http://<icinga2IP>/icingaweb2/setup 
  
+ ![4]()
+ 
 Lấy token từ icinga2SVR và nhập vào 
-icingacli setup token create 
+
+    icingacli setup token create 
+
 Chọn module cần cài, ở đây chỉ tick monitoring  
-Check lại các gói yêu cầu 
+
+Check lại các gói yêu cầu
+
+![5]()
  
 Chọn Authentication là Database 
  
+ ![6]()
+ 
 Tạo database cho icingaweb 
+ 
+ ![7]()
  
 Điền user và password đã tạo khi cài mysql 
  
+ ![8]()
+ 
 Tạo tài khoản quản trị nền web 
+ 
+ ![9]()
  
 Configure log 
  
+ ![10]()
+ 
 Review 
  
-Chọn IDO là backend  
+ ![11]()
+ 
+Chọn IDO là backend
+
 Tạo database cho IDO 
+
+![12]()
  
 Tiếp tục chọn các thiết lập mặc định 
  
+![13]()
  
-Đang chèn hình ảnh... 
+![14]()
+
 Hoàn tất việc cài đặt, click vào login để đăng nhập vào giao diện web 
+
+![15]()
  
- 
-Monitoring DISK, RAM, CPU 
+#### b. Monitoring DISK, RAM, CPU 
 Sơ lược về một số file config trong icinga: /etc/icinga2 
-icinga.conf: Đây là nơi cấu hình cài đặt cho ứng dụng Icinga bao gồm hosts/services để check 
-constants.conf: file cấu hình có thể được sử dụng để xác định tham số global, xác định thư mục nguồn của các plugins có sẵn và mở rộng. 
-zones.conf: Tệp này có thể được sử dụng để xác định đối tượng cấu hình Zone và Endpoint yêu cầu cho giám sát phân tán. 
-thư mục conf.d: Thư mục này chứa cấu hình ví dụ sẽ giúp bắt đầu theo dõi máy chủ lưu trữ cục bộ và các dịch vụ của nó. Ví dụ: 
-hosts.conf 
-services.conf 
-users.conf 
-notifications.conf 
-commands.conf 
-groups.conf 
-templates.conf 
-downtimes.conf 
-timeperiods.conf 
-satellite.conf 
-api-users.conf 
-app.conf 
+
+ * icinga.conf: Đây là nơi cấu hình cài đặt cho ứng dụng Icinga bao gồm hosts/services để check 
+ * constants.conf: file cấu hình có thể được sử dụng để xác định tham số global, xác định thư mục nguồn của các plugins có sẵn và mở rộng. 
+ * zones.conf: Tệp này có thể được sử dụng để xác định đối tượng cấu hình Zone và Endpoint yêu cầu cho giám sát phân tán.
+ * Thư mục conf.d: Thư mục này chứa cấu hình ví dụ sẽ giúp bắt đầu theo dõi máy chủ lưu trữ cục bộ và các dịch vụ của nó. Ví dụ: 
+  * hosts.conf 
+  * services.conf 
+  * users.conf 
+  * notifications.conf 
+  * commands.conf 
+  * groups.conf 
+  * templates.conf 
+  * downtimes.conf 
+  * timeperiods.conf 
+  * satellite.conf 
+  * api-users.conf 
+  * app.conf 
+
 icinga2 cung cấp một số service check sẵn, như load, procs, swap, users, icinga, ping4, ping6, ssh, http, optional: Icinga Web 2, disk, disk / 
+
 Change Directory vào thư mục conf.d 
-root@icinga2:~# cd /etc/icinga2/conf.d/ 
+
+    root@icinga2:~# cd /etc/icinga2/conf.d/ 
+
 Xóa file host.conf đi, ta sẽ tự tạo ra một thư mục mới để quản lý các node bằng các file conf theo tên node cho dễ 
+```
 root@icinga2:/etc/icinga2/conf.d# rm -rf hosts.conf 
 root@icinga2:/etc/icinga2/conf.d# mkdir hosts 
 root@icinga2:/etc/icinga2/conf.d# cd hosts 
 root@icinga2:/etc/icinga2/conf.d# vi node1.conf 
+```
+
 Ở đây ta sẽ sử dụng service check sẵn là hostalive (ping4), ssh và disk 
+```
 object Host "node1" { 
         import "generic-host" 
         address = "10.0.0.2" 
@@ -162,23 +213,40 @@ object Service "disk" {
         host_name = "node1" 
         check_command = "disk" 
 } 
- 
+``` 
+
+![16]()
+
 Config tương tự với node2.conf 
+
 Như thế ta đã monitoring được thông tin disk trên node1 và node2, để monitoring được thông tin RAM và CPU ta sẽ cần snmp 
+
 Cài đặt snmp trên node1 và node2 
+```
 root@node1:~# apt-get install snmpd 
-root@node2:~# apt-get install snmpd 
+root@node2:~# apt-get install snmpd
+```
 Xóa nội dung file snmpd.conf và chỉ cần thêm thông tin rocommunity string. 
+```
 root@node1:~# > /etc/snmp/snmpd.conf  
 root@node1:~# vi /etc/snmp/snmpd.conf 
+```
 Ở đây dùng rocommunity string là "vtp" 
  
+ ![17]()
+ 
 Restart lại dịch vụ 
-root@node1:~# service snmpd restart  
+
+    root@node1:~# service snmpd restart  
+
 Làm tương tự với node2 
+
 Trên icinga2 master, ta phải cài đặt thêm plugin nagios-snmp-plugins 
-root@icinga2:~# apt-get install nagios-snmp-plugins  
+
+    root@icinga2:~# apt-get install nagios-snmp-plugins  
+
 Trong file các file conf của node1 và node2, ta phải khai báo thông tin snmp_address và snmp_community 
+```
 object Host "node1" { 
         import "generic-host" 
         address = "10.0.0.2" 
@@ -186,7 +254,9 @@ object Host "node1" {
         vars.snmp_community = "vtp" 
         check_command = "hostalive" 
 } 
+```
 Theo dõi các thông tin CPU, RAM bằng các check_command của snmp 
+```
 object Service "snmp-load" { 
     host_name           = "node1" 
     vars.snmp_load_type = "netsl" 
@@ -203,9 +273,15 @@ object Service "snmp-memory" {
     vars.snmp_crit = "80,0" 
     check_command  = "snmp-memory" 
 } 
+```
 Reload lại service icinga2 
-root@icinga2:~# service icinga2 reload 
+
+    root@icinga2:~# service icinga2 reload 
+
 Làm tương tự với node2, sau đó ta sẽ lên giao diện web để kiểm tra 
-Những phần nào đang pending, ta có thể ấn vào check now để đẩy nhanh quá trình. Khi hoàn tất sẽ có kết quả như sau: 
+
+Những phần nào đang pending, ta có thể ấn vào check now để đẩy nhanh quá trình. Khi hoàn tất sẽ có kết quả như sau:
+
+![18]()
  
 Như vậy chúng ta đã cài đặt và monitor thành công 2 server Linux bằng icinga2 
