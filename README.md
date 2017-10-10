@@ -60,11 +60,13 @@ Các chức năng
 **icinga2-master:** 
  * OS: ubuntu server 16.04 
  * IP: 10.0.0.1 (internal) 
- * CPU: 1 core, Disk: 8GB, RAM: 256MB 
+ * CPU: 1 core, Disk: 8GB, RAM: 256MB
+ 
 **node1:**
  * OS: ubuntu server 16.04 
  * IP: 10.0.0.2 (internal) 
- * CPU: 1 core, Disk: 8GB, RAM: 256MB 
+ * CPU: 1 core, Disk: 8GB, RAM: 256MB
+ 
 **node2:**
  * OS: ubuntu server 16.04 
  * IP: 10.0.0.3 (internal) 
