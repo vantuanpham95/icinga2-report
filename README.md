@@ -55,7 +55,7 @@ Các chức năng
  
 ## II. Thực hiện LAB 
 ### 1. Chuẩn bị 
- ![2]()
+ ![topo](https://github.com/vantuanpham95/icinga2-report/blob/master/images/icinga2labtopo.png)
 **icinga2-master:** 
  * OS: ubuntu server 16.04 
  * IP: 10.0.0.1 (internal) 
@@ -83,12 +83,12 @@ Cài đặt icingaweb2
 
     apt-get install -y mysql-server php7.0 libapache2-mod-php7.0 
  
- ![1]()
+ ![1](https://github.com/vantuanpham95/icinga2-report/blob/master/images/1)
 Thêm mật khẩu cho mysql 
  
     apt-get install -y icingaweb2 
 
-![2]()
+![2](https://github.com/vantuanpham95/icinga2-report/blob/master/images/2.png)
 Thiết lập mySQL là backend cho icinga nếu lỡ ấn No trong khi cài đặt mysql 
 
     icinga2 feature enable ido-mysql command 
@@ -100,7 +100,7 @@ Set timezone cho php
 thêm dòng 
 
     date.timezone = Asia/Ho_Chi_Minh 
- ![3]()
+ ![3](https://github.com/vantuanpham95/icinga2-report/blob/master/images/3.png)
 Restart apache 
 
     /etc/init.d/apache2 restart 
@@ -109,7 +109,7 @@ Như vậy đã cài đặt xong, giờ chúng ta tiếp tục trên nền web �
 
 Vào trình duyệt: http://<icinga2IP>/icingaweb2/setup 
  
- ![4]()
+ ![4](https://github.com/vantuanpham95/icinga2-report/blob/master/images/4.png)
  
 Lấy token từ icinga2SVR và nhập vào 
 
@@ -119,47 +119,47 @@ Chọn module cần cài, ở đây chỉ tick monitoring
 
 Check lại các gói yêu cầu
 
-![5]()
+![5](https://github.com/vantuanpham95/icinga2-report/blob/master/images/5.png)
  
 Chọn Authentication là Database 
  
- ![6]()
+ ![6](https://github.com/vantuanpham95/icinga2-report/blob/master/images/6.png)
  
 Tạo database cho icingaweb 
  
- ![7]()
+ ![7](https://github.com/vantuanpham95/icinga2-report/blob/master/images/7.png)
  
 Điền user và password đã tạo khi cài mysql 
  
- ![8]()
+ ![8](https://github.com/vantuanpham95/icinga2-report/blob/master/images/8.png)
  
 Tạo tài khoản quản trị nền web 
  
- ![9]()
+ ![9](https://github.com/vantuanpham95/icinga2-report/blob/master/images/9.png)
  
 Configure log 
  
- ![10]()
+ ![10](https://github.com/vantuanpham95/icinga2-report/blob/master/images/10.png)
  
 Review 
  
- ![11]()
+ ![11](https://github.com/vantuanpham95/icinga2-report/blob/master/images/11.png)
  
 Chọn IDO là backend
 
 Tạo database cho IDO 
 
-![12]()
+![12](https://github.com/vantuanpham95/icinga2-report/blob/master/images/12.png)
  
 Tiếp tục chọn các thiết lập mặc định 
  
-![13]()
+![13](https://github.com/vantuanpham95/icinga2-report/blob/master/images/13.png)
  
-![14]()
+![14](https://github.com/vantuanpham95/icinga2-report/blob/master/images/14.png)
 
 Hoàn tất việc cài đặt, click vào login để đăng nhập vào giao diện web 
 
-![15]()
+![15](https://github.com/vantuanpham95/icinga2-report/blob/master/images/15.png)
  
 #### b. Monitoring DISK, RAM, CPU 
 Sơ lược về một số file config trong icinga: /etc/icinga2 
@@ -215,7 +215,7 @@ object Service "disk" {
 } 
 ``` 
 
-![16]()
+![16](https://github.com/vantuanpham95/icinga2-report/blob/master/images/16.png)
 
 Config tương tự với node2.conf 
 
@@ -233,7 +233,7 @@ root@node1:~# vi /etc/snmp/snmpd.conf
 ```
 Ở đây dùng rocommunity string là "vtp" 
  
- ![17]()
+ ![17](https://github.com/vantuanpham95/icinga2-report/blob/master/images/17.png)
  
 Restart lại dịch vụ 
 
@@ -282,6 +282,6 @@ Làm tương tự với node2, sau đó ta sẽ lên giao diện web để kiể
 
 Những phần nào đang pending, ta có thể ấn vào check now để đẩy nhanh quá trình. Khi hoàn tất sẽ có kết quả như sau:
 
-![18]()
+![18](https://github.com/vantuanpham95/icinga2-report/blob/master/images/18.png)
  
 Như vậy chúng ta đã cài đặt và monitor thành công 2 server Linux bằng icinga2 
