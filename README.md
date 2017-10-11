@@ -291,3 +291,46 @@ Những phần nào đang pending, ta có thể ấn vào check now để đẩy
 ![18](https://github.com/vantuanpham95/icinga2-report/blob/master/images/18.png)
  
 Như vậy chúng ta đã cài đặt và monitor thành công 2 server Linux bằng icinga2 
+#### c. Cài đặt cảnh báo qua email 
+Cài đặt các service ssmtp và mailutils cho icinga2 master để có thể gửi email:
+
+    root@icinga2:~# apt-get install -y ssmtp mailutils 
+
+Cấu hình thông số email để icinga2 có thể gửi email đi trong /etc/ssmtp/ssmtp.conf, ở đây thiết lập bằng tài khoản gmail: 
+```
+mailhub=smtp.gmail.com:465  
+UseTLS=yes  
+FromLineOverride=yes  
+AuthUser=vantuanpham95@gmail.com 
+AuthPass=P@ssword 
+```
+
+Kiểm tra xem icinga2 có gửi được email đi không 
+
+    root@icinga2:~# echo "hello, world" | mail -s "Test Icinga2" svtn-tuanphamvan@vccorp.vn 
+
+Kết quả là icinga2 đã gửi được email thành công. 
+
+![19](https://github.com/vantuanpham95/icinga2-report/blob/master/images/19.png)
+
+Bây giờ, ta sẽ tự tạo ra các vấn đề của các node để nhận cảnh báo bằng cách sử dụng stress: 
+
+    root@node1:~# apt-get install stress –y 
+ 
+Tự tạo ra vấn đề CPU: 
+
+    root@node1:~# stress --cpu 6 
+
+Chờ một lúc, ta sẽ thấy trên icingaweb2 nhận được các thông tin cảnh báo CPU vượt ngưỡng 
+
+(Ngưỡng cảnh báo của icinga2 có các thông số mặc định, nhưng chúng ta cũng có thể tự định nghĩa thông qua các tham số vars.snmp_warn và vars.snmp.crit trong các file config của các node) 
+
+![20](https://github.com/vantuanpham95/icinga2-report/blob/master/images/20.png)
+
+![21](https://github.com/vantuanpham95/icinga2-report/blob/master/images/21.png)
+
+Kiểm tra lại hòm mail sẽ thấy email cảnh báo được gửi bởi icinga2 thông qua tài khoản email đã được thiết lập: 
+
+![22](https://github.com/vantuanpham95/icinga2-report/blob/master/images/22.png)
+
+Như vậy chúng ta đã cấu hình thành công email cảnh báo trên icinga2. 
