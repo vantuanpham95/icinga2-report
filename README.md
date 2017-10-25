@@ -187,6 +187,24 @@ Sơ lược về một số file config trong icinga: /etc/icinga2
    * api-users.conf 
    * app.conf 
 
+ * templates.conf: tệp này tạo ra một số file cấu hình sẵn để dành cho các host hay service có chung thuộc tính kế thừa templates này. Các object host hay service có thể kế thừa nhiều templates miễn là có thuộc tính phù hợp. Các thuộc tính khi được các object host hay service kế thừa rồi vẫn có thể chỉnh sửa lại trong code bằng cách ghi đè, hoặc thêm thuộc tính bằng cách sử dụng toán tử += 
+
+ * users.conf: tệp này định nghĩa ra các users chứa thông tin mail hay số điện thoại để thực hiện thông báo. Tệp này cũng định nghĩa ra các groups là một nhóm các users khác nhau có chung một mục đích, để khi gửi thông báo thì không cần khai báo đầy đủ users ra. Users.conf chỉ phục vụ cho mục đích notifications. 
+
+ * notifications.conf: tệp này sẽ áp các notifications được định nghĩa từ trước theo host hay service 
+command.conf: tệp này định nghĩa các lệnh để thực hiện: mail-host-notification, mail-service-notification hay cũng có thể tự định nghĩa ra các lệnh đặc biệt để sử dụng tùy theo nhu cầu 
+
+ * hosts.conf: tệp này khai báo ra các host cần monitor, trong đó cần khai báo các biến cần sử dụng để monitor host đó như: address, snmp address, cũng có thể khai báo ra các service check cho host đó 
+
+Khi có nhiều host cần monitor và các service để monitor khác nhau, cũng như vấn gửi cảnh báo là khác nhau, thì việc khai báo thủ công là mất thời gian. Khi đó chúng ta có thể sử dụng các thuộc tính chung, tìm ra các điểm chung, điểm riêng của host hay service, sau đó assign hay ignore để áp dụng rule cho chuẩn xác. 
+
+Ví dụ 
+```
+apply Notification "disk-notification-via-email" to Service { 
+  import "mail-disk-notification" 
+  assign where match("*disk*", service.name) 
+} 
+```
 icinga2 cung cấp một số service check sẵn, như load, procs, swap, users, icinga, ping4, ping6, ssh, http, optional: Icinga Web 2, disk, disk / 
 
 Change Directory vào thư mục conf.d 
@@ -223,11 +241,23 @@ object Service "disk" {
 
 ![16](https://github.com/vantuanpham95/icinga2-report/blob/master/images/16.png)
 
+Ta có thể định nghĩa lại giá trị cảnh báo disk bằng cách sử dụng biến như sau: 
+```
+object Service "disk" { 
+        host_name = "node1" 
+        check_command = "disk" 
+        vars.disk_wfree = "50%" 
+        vars.disk_cfree = "20%" 
+  
+} 
+```
+
 Config tương tự với node2.conf 
 
 Như thế ta đã monitoring được thông tin disk trên node1 và node2, để monitoring được thông tin RAM và CPU ta sẽ cần snmp 
 
 Cài đặt snmp trên node1 và node2 
+
 ```
 root@node1:~# apt-get install snmpd 
 root@node2:~# apt-get install snmpd
@@ -334,3 +364,170 @@ Kiểm tra lại hòm mail sẽ thấy email cảnh báo được gửi bởi ic
 ![22](https://github.com/vantuanpham95/icinga2-report/blob/master/images/22.png)
 
 Như vậy chúng ta đã cấu hình thành công email cảnh báo trên icinga2. 
+#### d. Cài đặt notifications theo service check đến từng user groups
+Bài toán đặt ra là gửi cảnh báo theo RAM, DISK và CPU đến từng nhóm users có liên quan. Ở đây ta cần định nghĩa các user và user groups trong file **/etc/icinga2/conf.d/users.conf** 
+```
+object User "tuanpv" { 
+  import "generic-user" 
+  
+  display_name = "Pham Van Tuan" 
+  groups = [ "CPU" ] 
+  enable_notifications = true 
+  states = [ OK, Warning, Critical ] 
+  types = [ Problem, Recovery ] 
+  email = "tuanpauldesign01@gmail.com" 
+} 
+object User "tungnt" { 
+  import "generic-user" 
+  
+  display_name = "Nguyen Thanh Tung" 
+  groups = [ "CPU" ] 
+  enable_notifications = true 
+  states = [ OK, Warning, Critical ] 
+  types = [ Problem, Recovery ] 
+  
+  email = "tuanpauldesign02@gmail.com" 
+} 
+  
+object User "thaobtp" { 
+  import "generic-user" 
+  
+  display_name = "Bui Thi Phuong Thao" 
+  groups = [ "RAM" ] 
+  enable_notifications = true 
+  states = [ OK, Warning, Critical ] 
+  types = [ Problem, Recovery ] 
+  
+  email = "tuanpauldesign03@gmail.com" 
+} 
+  
+object User "tuyendt" { 
+  import "generic-user" 
+  
+  display_name = "Dinh Thanh Tuyen" 
+  groups = [ "RAM" ] 
+  enable_notifications = true 
+  states = [ OK, Warning, Critical ] 
+  types = [ Problem, Recovery ] 
+  
+  email = "tuanpauldesign04@gmail.com" 
+} 
+  
+object User "binhnd" { 
+  import "generic-user" 
+  
+  display_name = "Nguyen Duy Binh" 
+  groups = [ "DISK" ] 
+  enable_notifications = true 
+  states = [ OK, Warning, Critical ] 
+  types = [ Problem, Recovery ] 
+  
+  email = "tuanpauldesign05@gmail.com" 
+} 
+  
+object User "quynhnt" { 
+  import "generic-user" 
+  
+  display_name = "Nguyen Thi Quynh" 
+  groups = [ "CPU" ] 
+  enable_notifications = true 
+  states = [ OK, Warning, Critical ] 
+  types = [ Problem, Recovery ] 
+  
+  email = "tuanpauldesign06@gmail.com" 
+} 
+  
+  
+object UserGroup "RAM" { 
+  display_name = "RAM - adminsgroup" 
+} 
+  
+object UserGroup "DISK" { 
+  display_name = "DISK - adminsgroup" 
+} 
+  
+object UserGroup "CPU" { 
+  display_name = "CPU - adminsgroup" 
+} 
+```
+
+Ta tạo ra 3 templates notifications theo từng dịch vụ yêu cầu trong file /etc/icinga2/templates.conf 
+```
+template Notification "mail-disk-notification" { 
+  user_groups = [ "DISK"] 
+  command = "mail-service-notification" 
+  states = [ OK, Warning, Critical, Unknown ] 
+  types = [ Problem, Acknowledgement, Recovery, Custom, 
+            FlappingStart, FlappingEnd, 
+            DowntimeStart, DowntimeEnd, DowntimeRemoved ] 
+  
+  vars += { 
+    // notification_icingaweb2url = "https://www.example.com/icingaweb2" 
+    // notification_from = "Icinga 2 Service Monitoring <icinga@example.com>" 
+    notification_logtosyslog = false 
+  } 
+  
+  period = "24x7" 
+  
+} 
+  
+template Notification "mail-ram-notification" { 
+  user_groups = [ "RAM"] 
+  command = "mail-service-notification" 
+  states = [ OK, Warning, Critical, Unknown ] 
+  types = [ Problem, Acknowledgement, Recovery, Custom, 
+            FlappingStart, FlappingEnd, 
+            DowntimeStart, DowntimeEnd, DowntimeRemoved ] 
+  
+  vars += { 
+    // notification_icingaweb2url = "https://www.example.com/icingaweb2" 
+    // notification_from = "Icinga 2 Service Monitoring <icinga@example.com>" 
+    notification_logtosyslog = false 
+  } 
+  
+  period = "24x7" 
+  
+} 
+  
+template Notification "mail-cpu-notification" { 
+  user_groups = [ "CPU"] 
+  command = "mail-service-notification" 
+  states = [ OK, Warning, Critical, Unknown ] 
+  types = [ Problem, Acknowledgement, Recovery, Custom, 
+            FlappingStart, FlappingEnd, 
+            DowntimeStart, DowntimeEnd, DowntimeRemoved ] 
+  
+  vars += { 
+    // notification_icingaweb2url = "https://www.example.com/icingaweb2" 
+    // notification_from = "Icinga 2 Service Monitoring <icinga@example.com>" 
+    notification_logtosyslog = false 
+  } 
+  
+  period = "24x7" 
+  
+} 
+``` 
+Và cuối cùng là apply notification templates này tới các dịch vụ yêu cầu trong file /etc/icinga2/conf.d/notifications.conf 
+```
+apply Notification "disk-notification-via-email" to Service { 
+  import "mail-disk-notification" 
+  assign where match("*disk*", service.name) 
+} 
+apply Notification "ram-notification-via-email" to Service { 
+  import "mail-ram-notification" 
+  assign where match("*memory*", service.name) 
+} 
+apply Notification "cpu-notification-via-email" to Service { 
+  import "mail-cpu-notification" 
+  assign where match("*load*", service.name) 
+} 
+```
+Reload lại service icinga2, chúng ta lên web để kiểm tra kết quả: 
+
+Về disk: 
+ 
+Về CPU: 
+ 
+Về RAM: 
+ 
+Như vậy chúng ta đã gửi cảnh báo email theo từng service tới các user groups thành công! 
