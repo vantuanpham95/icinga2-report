@@ -524,11 +524,16 @@ apply Notification "cpu-notification-via-email" to Service {
 ```
 Reload lại service icinga2, chúng ta lên web để kiểm tra kết quả: 
 
-Về disk: 
+Về disk:
+
  ![23](https://github.com/vantuanpham95/icinga2-report/blob/master/images/23.png)
  
 Về CPU: 
- ![24](https://github.com/vantuanpham95/icinga2-report/blob/master/images/24.png)
+
+![24](https://github.com/vantuanpham95/icinga2-report/blob/master/images/24.png)
+
 Về RAM: 
- ![25](https://github.com/vantuanpham95/icinga2-report/blob/master/images/25.png)
+
+![25](https://github.com/vantuanpham95/icinga2-report/blob/master/images/25.png)
+
 Như vậy chúng ta đã gửi cảnh báo email theo từng service tới các user groups thành công! 
