@@ -506,6 +506,23 @@ template Notification "mail-cpu-notification" {
   period = "24x7" 
   
 } 
+template Notification "mail-default-notification" { 
+  users = [ "tuanpv"] 
+  command = "mail-service-notification" 
+  states = [ OK, Warning, Critical, Unknown ] 
+  types = [ Problem, Acknowledgement, Recovery, Custom, 
+            FlappingStart, FlappingEnd, 
+            DowntimeStart, DowntimeEnd, DowntimeRemoved ] 
+  
+  vars += { 
+    // notification_icingaweb2url = "https://www.example.com/icingaweb2" 
+    // notification_from = "Icinga 2 Service Monitoring <icinga@example.com>" 
+    notification_logtosyslog = false 
+  } 
+  
+  period = "24x7" 
+  
+} 
 ``` 
 Và cuối cùng là apply notification templates này tới các dịch vụ yêu cầu trong file /etc/icinga2/conf.d/notifications.conf 
 ```
@@ -520,6 +537,13 @@ apply Notification "ram-notification-via-email" to Service {
 apply Notification "cpu-notification-via-email" to Service { 
   import "mail-cpu-notification" 
   assign where match("*load*", service.name) 
+} 
+apply Notification "default-notification-via-email" to Service { 
+import "mail-default-notification" 
+  assign where host.name == "node1" 
+  ignore where match("*disk*", service.name) 
+  ignore where match("*disk*", service.name) 
+  ignore where match("*load*", service.name) 
 } 
 ```
 Reload lại service icinga2, chúng ta lên web để kiểm tra kết quả: 
